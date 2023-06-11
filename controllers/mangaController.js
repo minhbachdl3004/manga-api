@@ -11,14 +11,14 @@ const addManga = async (req, res) => {
     for (const item of data) {
       item.mangaId = totalMangas + i;
       try {
-        const existingManga = await Manga.findOne({ title: item.title });
+        const existingManga = await Manga.findOne({ name: item.name });
         if (existingManga) {
-          existingManga.thumbnail = item.thumbnail;
+          existingManga.otherName = item.otherName;
+          existingManga.poster = item.poster;
           existingManga.genres = item.genres;
-          existingManga.author = item.author;
           existingManga.description = item.description;
+          existingManga.moreInfo = item.moreInfo;
           existingManga.chapters = item.chapters;
-          existingManga.totalChapters = item.totalChapters;
         } else {
           await Manga.create(item);
         }
@@ -77,17 +77,17 @@ const getAllMangas = async (req, res) => {
 //SEARCH MANGA BY NAME
 const searchMangaByName = async (req, res) => {
   try {
-    const { title } = req.params;
-    console.log(title);
+    const { name } = req.params;
+    console.log(name);
 
     const page = parseInt(req.query.page) || 1;
     const perPage = 10;
     const totalMangas = await Manga.countDocuments({
-      title: { $regex: new RegExp(title, "i") },
+      name: { $regex: new RegExp(name, "i") },
     });
 
     const mangas = await Manga.find({
-      title: { $regex: new RegExp(title, "i") },
+      name: { $regex: new RegExp(name, "i") },
     })
       .sort({ createdAt: -1 })
       .skip((page - 1) * perPage)
@@ -118,7 +118,6 @@ const getMangaByIdAndChapter = async (req, res) => {
   try {
     const { mangaId, chapterId } = req.query;
     console.log(mangaId, chapterId);
-    const id = Number(chapterId)
 
     const manga = await Manga.findOne({ mangaId: mangaId });
     console.log(manga);
@@ -128,7 +127,7 @@ const getMangaByIdAndChapter = async (req, res) => {
       return;
     }
 
-    const chapter = manga.chapters.find((chap) => chap.chapterId === id);
+    const chapter = manga.chapters.find((chap) => chap.chapterId.includes(chapterId));
     if (!chapter) {
       res.status(404).json("Not found Chapter");
       return;

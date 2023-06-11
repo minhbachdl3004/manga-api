@@ -2,7 +2,11 @@ const mongoose = require("mongoose");
 
 const chapterSchema = new mongoose.Schema({
   chapterId: {
-    type: Number,
+    type: String,
+    require: true,
+  },
+  chapterName: {
+    type: String,
     require: true,
   },
   images: {
@@ -13,17 +17,20 @@ const chapterSchema = new mongoose.Schema({
 
 const mangaSchema = new mongoose.Schema(
   {
-    title: {
+    name: {
       type: String,
       require: true,
       unique: true,
+    },
+    otherName: {
+      type: String,
     },
     mangaId: {
       type: Number,
       require: true,
       unique: true,
     },
-    thumbnail: {
+    poster: {
       type: String,
       require: true,
       unique: true,
@@ -33,26 +40,18 @@ const mangaSchema = new mongoose.Schema(
       require: true,
       default: [],
     },
-    author: {
+    description: {
       type: String,
       require: true,
     },
-    description: {
-      type: String,
+    moreInfo: {
+      type: {},
       require: true,
     },
     chapters: {
       type: [chapterSchema],
       require: true,
     },
-    totalChapters: {
-      type: Number,
-      require: true,
-    },
-    status: {
-      type: Number,
-      default: 1,
-    }
   },
   { timestamps: true }
 );

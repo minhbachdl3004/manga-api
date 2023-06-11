@@ -14,7 +14,7 @@ const upload = multer({ dest: 'uploads/' });
 router.post("/add", upload.single('file'), mangaController.addManga);
 
 //GET MANGAS BY NAME
-router.get("/title/:title", mangaController.searchMangaByName);
+router.get("/name/:name", mangaController.searchMangaByName);
 
 //SEARCH MANGA BY NAME AND CHAPTER
 router.get("/search", mangaController.getMangaByIdAndChapter);
