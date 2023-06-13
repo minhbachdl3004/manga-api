@@ -19,6 +19,7 @@ const addManga = async (req, res) => {
           existingManga.description = item.description;
           existingManga.moreInfo = item.moreInfo;
           existingManga.chapters = item.chapters;
+          existingManga.mangaPoster = item.mangaPoster;
         } else {
           await Manga.create(item);
         }
@@ -119,22 +120,24 @@ const getMangaByIdAndChapter = async (req, res) => {
     const { mangaId, chapterId } = req.query;
     console.log(mangaId, chapterId);
 
-    const manga = await Manga.findOne({ mangaId: mangaId });
-    console.log(manga);
+    const mangas = await Manga.findOne({ mangaId: mangaId });
+    console.log(mangas);
 
-    if (!manga) {
+    if (!mangas) {
       res.status(404).json("Not found Manga");
       return;
     }
 
-    const chapter = manga.chapters.find((chap) => chap.chapterId.includes(chapterId));
+    const chapter = mangas.chapters.find((chap) =>
+      chap.chapterId.includes(chapterId)
+    );
     if (!chapter) {
       res.status(404).json("Not found Chapter");
       return;
     }
-    manga.chapters = [chapter]
+    mangas.chapters = [chapter];
 
-    res.status(200).json({ manga });
+    res.status(200).json({ mangas });
   } catch (error) {
     res.status(500).json(error);
   }
@@ -148,11 +151,11 @@ const searchMangaByGenre = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const perPage = 10;
     const totalMangas = await Manga.countDocuments({
-      genres: { $in: genre },
+      genres: { $regex: new RegExp('^' + genre, 'i') },
     }).exec();
 
     const mangas = await Manga.find({
-      genres: { $in: genre },
+      genres: { $regex: new RegExp('^' + genre, 'i') },
     })
       .sort({ createdAt: -1 })
       .skip((page - 1) * perPage)
@@ -175,11 +178,29 @@ const searchMangaByGenre = async (req, res) => {
     res.status(500).json(error);
   }
 };
+//GET MANGA FOR POSTER MANGA
+const getMangaForPoster = async (req, res) => {
+  try {
+
+    const mangas = await Manga.find({ posterManga: 1 });
+    console.log(mangas);
+
+    if (!mangas) {
+      res.status(404).json("Not found Manga");
+      return;
+    }
+
+    res.status(200).json({ mangas });
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
 
 module.exports = {
   addManga,
   getAllMangas,
   searchMangaByName,
+  getMangaForPoster,
   searchMangaByGenre,
   getMangaByIdAndChapter,
 };

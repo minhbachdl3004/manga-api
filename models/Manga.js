@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require("mongoose")
 
 const chapterSchema = new mongoose.Schema({
   chapterId: {
@@ -52,6 +52,10 @@ const mangaSchema = new mongoose.Schema(
       type: [chapterSchema],
       require: true,
     },
+    posterManga: {
+      type: Number,
+      default: 0,
+    }
   },
   { timestamps: true }
 );

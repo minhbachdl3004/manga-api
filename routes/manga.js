@@ -1,5 +1,7 @@
 const mangaController = require("../controllers/mangaController");
+const recommendMangaController = require("../controllers/recommendMangaController")
 const multer = require('multer');
+const { getRecommendMangas } = require("../controllers/recommendMangaController");
 
 
 
@@ -22,5 +24,11 @@ router.get("/search", mangaController.getMangaByIdAndChapter);
 
 //GET MANGAS BY GENRE
 router.get("/genre/:genre", mangaController.searchMangaByGenre);
+
+//GET MANGAS FOR POSTER
+router.get("/poster", mangaController.getMangaForPoster)
+
+//GET RECOMMEND MANGAS
+router.get('/recommend', recommendMangaController.getRecommendMangas)
 
 module.exports = router;
