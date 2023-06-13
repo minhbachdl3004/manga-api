@@ -40,7 +40,7 @@ const getTrendingMangas = async (req, res) => {
           name: 1,
           poster: 1,
           genres: 1,
-          moreinfo: 1,
+          moreInfo: 1,
           totalChapter: 1,
           score: "$moreInfo.Score",
         },

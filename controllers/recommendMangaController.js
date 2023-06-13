@@ -37,6 +37,7 @@ const getRecommendMangas = async (req, res) => {
           genres: 1,
           moreinfo: 1,
           totalChapter: 1,
+          moreInfo: 1,
           views: "$moreInfo.Views",
         },
       },
