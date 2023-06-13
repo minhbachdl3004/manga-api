@@ -2,28 +2,33 @@ const Manga = require("../models/Manga");
 const fs = require("fs");
 
 //GET ALL MANGA
-const getRecommendMangas = async (req, res) => {
+const getTrendingMangas = async (req, res) => {
   try {
     const mangas = await Manga.aggregate([
       {
+        $redact: {
+          $cond: {
+            if: { $ne: ["$moreInfo.Score", "N/A"] },
+            then: "$$KEEP",
+            else: "$$PRUNE",
+          },
+        },
+      },
+      {
+        $match: {
+          "moreInfo.Score": { $ne: "N/A" },
+        },
+      },
+      {
         $addFields: {
-          viewsNumeric: {
-            $cond: {
-              if: {
-                $regexMatch: {
-                  input: "$moreInfo.Views",
-                  regex: /^\d+(,\d+)*$/,
-                },
-              },
-              then: { $toInt: { $replaceAll: { input: "$moreInfo.Views", find: ",", replacement: "" } } },
-              else: 0,
-            },
+          scoreNumeric: {
+            $toDouble: "$moreInfo.Score",
           },
         },
       },
       {
         $sort: {
-          viewsNumeric: -1,
+          scoreNumeric: -1,
         },
       },
       {
@@ -37,7 +42,7 @@ const getRecommendMangas = async (req, res) => {
           genres: 1,
           moreinfo: 1,
           totalChapter: 1,
-          views: "$moreInfo.Views",
+          score: "$moreInfo.Score",
         },
       },
     ]);
@@ -53,5 +58,5 @@ const getRecommendMangas = async (req, res) => {
 };
 
 module.exports = {
-  getRecommendMangas,
+  getTrendingMangas,
 };

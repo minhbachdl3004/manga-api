@@ -1,7 +1,7 @@
 const mangaController = require("../controllers/mangaController");
 const recommendMangaController = require("../controllers/recommendMangaController")
+const trendingMangaController = require("../controllers/trendingMangaController")
 const multer = require('multer');
-const { getRecommendMangas } = require("../controllers/recommendMangaController");
 
 
 
@@ -30,5 +30,8 @@ router.get("/poster", mangaController.getMangaForPoster)
 
 //GET RECOMMEND MANGAS
 router.get('/recommend', recommendMangaController.getRecommendMangas)
+
+//GET TRENDING MANGAS
+router.get('/trending', trendingMangaController.getTrendingMangas)
 
 module.exports = router;

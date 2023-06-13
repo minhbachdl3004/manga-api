@@ -55,6 +55,10 @@ const mangaSchema = new mongoose.Schema(
     posterManga: {
       type: Number,
       default: 0,
+    },
+    totalChapter: {
+      type: Number,
+      require: true
     }
   },
   { timestamps: true }

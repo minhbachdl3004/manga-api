@@ -10,6 +10,7 @@ const addManga = async (req, res) => {
     let i = 1;
     for (const item of data) {
       item.mangaId = totalMangas + i;
+      item.totalChapter = item.chapters.length;
       try {
         const existingManga = await Manga.findOne({ name: item.name });
         if (existingManga) {
@@ -20,6 +21,7 @@ const addManga = async (req, res) => {
           existingManga.moreInfo = item.moreInfo;
           existingManga.chapters = item.chapters;
           existingManga.mangaPoster = item.mangaPoster;
+          existingManga.totalChapter = item.totalChapter;
         } else {
           await Manga.create(item);
         }
