@@ -39,6 +39,7 @@ const getTrendingMangas = async (req, res) => {
           _id: 1,
           name: 1,
           poster: 1,
+          mangaId: 1,
           genres: 1,
           moreInfo: 1,
           totalChapter: 1,

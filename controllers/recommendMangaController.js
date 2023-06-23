@@ -33,9 +33,9 @@ const getRecommendMangas = async (req, res) => {
         $project: {
           _id: 1,
           name: 1,
+          mangaId: 1,
           poster: 1,
           genres: 1,
-          moreinfo: 1,
           totalChapter: 1,
           moreInfo: 1,
           views: "$moreInfo.Views",

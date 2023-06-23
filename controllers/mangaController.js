@@ -80,7 +80,7 @@ const getAllMangas = async (req, res) => {
 //SEARCH MANGA BY NAME
 const searchMangaByName = async (req, res) => {
   try {
-    const { name } = req.params;
+    const { name } = req.query;
     console.log(name);
 
     const page = parseInt(req.query.page) || 1;
@@ -116,30 +116,40 @@ const searchMangaByName = async (req, res) => {
   }
 };
 
+const getMangaById = async (req, res) => {
+  try {
+    const { mangaId } = req.params;
+    console.log(mangaId);
+
+    const manga = await Manga.findOne({
+      mangaId: mangaId,
+    });
+
+    if (manga.length === 0) {
+      res.status(404).json("Not found Manga");
+      return;
+    }
+    res.status(200).json({ manga });
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
 //GET MANGA BY NAME AND ITS CHAPTER
-const getMangaByIdAndChapter = async (req, res) => {
+const getChapterByChapterId = async (req, res) => {
   try {
     const { mangaId, chapterId } = req.query;
-    console.log(mangaId, chapterId);
+    console.log(chapterId);
 
-    const mangas = await Manga.findOne({ mangaId: mangaId });
-    console.log(mangas);
+    const manga = await Manga.findOne({ mangaId: mangaId });
+    console.log(manga);
 
-    if (!mangas) {
+    if (!manga) {
       res.status(404).json("Not found Manga");
       return;
     }
 
-    const chapter = mangas.chapters.find((chap) =>
-      chap.chapterId.includes(chapterId)
-    );
-    if (!chapter) {
-      res.status(404).json("Not found Chapter");
-      return;
-    }
-    mangas.chapters = [chapter];
-
-    res.status(200).json({ mangas });
+    res.status(200).json({ manga });
   } catch (error) {
     res.status(500).json(error);
   }
@@ -152,12 +162,13 @@ const searchMangaByGenre = async (req, res) => {
 
     const page = parseInt(req.query.page) || 1;
     const perPage = 10;
+
     const totalMangas = await Manga.countDocuments({
-      genres: { $regex: new RegExp('^' + genre, 'i') },
+      genres: { $regex: new RegExp("^" + genre, "i") },
     }).exec();
 
     const mangas = await Manga.find({
-      genres: { $regex: new RegExp('^' + genre, 'i') },
+      genres: { $regex: new RegExp("^" + genre, "i") },
     })
       .sort({ createdAt: -1 })
       .skip((page - 1) * perPage)
@@ -167,6 +178,7 @@ const searchMangaByGenre = async (req, res) => {
       res.status(404).json("Not found Manga");
       return;
     }
+
     res.status(200).json({
       mangas,
       pagination: {
@@ -177,13 +189,12 @@ const searchMangaByGenre = async (req, res) => {
       },
     });
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).json({ error: error });
   }
 };
 //GET MANGA FOR POSTER MANGA
 const getMangaForPoster = async (req, res) => {
   try {
-
     const mangas = await Manga.find({ posterManga: 1 });
     console.log(mangas);
 
@@ -201,8 +212,9 @@ const getMangaForPoster = async (req, res) => {
 module.exports = {
   addManga,
   getAllMangas,
+  getMangaById,
   searchMangaByName,
   getMangaForPoster,
   searchMangaByGenre,
-  getMangaByIdAndChapter,
+  getChapterByChapterId,
 };
