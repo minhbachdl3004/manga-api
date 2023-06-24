@@ -27,10 +27,10 @@ router.get("/search", mangaController.getChapterByChapterId);
 router.get("/genre/:genre", mangaController.searchMangaByGenre);
 
 //GET MANGAS FOR POSTER
-router.get("/poster", mangaController.getMangaForPoster)
+router.get("/poster-manga", mangaController.getMangaForPoster)
 
 //GET RECOMMEND MANGAS
-router.get('/recommended', recommendMangaController.getRecommendMangas)
+router.get('/recommended-manga', recommendMangaController.getRecommendMangas)
 
 //GET TRENDING MANGAS
 router.get('/trending-manga', trendingMangaController.getTrendingMangas)
