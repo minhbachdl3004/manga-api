@@ -22,7 +22,6 @@ router.get("/name/search", mangaController.searchMangaByName);
 //SEARCH MANGA BY NAME AND CHAPTER
 router.get("/search", mangaController.getChapterByChapterId);
 
-
 //GET MANGAS BY GENRE
 router.get("/genre/:genre", mangaController.searchMangaByGenre);
 

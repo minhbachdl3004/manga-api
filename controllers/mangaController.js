@@ -6,7 +6,7 @@ const addManga = async (req, res) => {
   try {
     const jsonData = fs.readFileSync(req.file.path, "utf8");
     const data = JSON.parse(jsonData);
-    let message = ""
+    let message = "";
     const totalMangas = await Manga.countDocuments();
     let i = 1;
     for (const item of data) {
@@ -24,10 +24,10 @@ const addManga = async (req, res) => {
           existingManga.mangaPoster = item.mangaPoster;
           existingManga.totalChapter = item.totalChapter;
           await existingManga.save();
-          message = "Update manga successfully"
+          message = "Update manga successfully";
         } else {
           await Manga.create(item);
-          message = "Add manga successfully"
+          message = "Add manga successfully";
         }
         i++;
       } catch (error) {
@@ -36,10 +36,8 @@ const addManga = async (req, res) => {
     }
     // Delete the uploaded file
     fs.unlinkSync(req.file.path);
-    
-    return res
-      .status(200)
-      .json({ message: message, count: data.length });
+
+    return res.status(200).json({ message: message, count: data.length });
   } catch (error) {
     console.error("Error updating data:", error);
     return res
@@ -152,7 +150,19 @@ const getChapterByChapterId = async (req, res) => {
       return;
     }
 
-    res.status(200).json({ manga });
+    const chapters = manga.chapters;
+    const currentChapterIndex = chapters.findIndex(
+      (chapter) => chapter._id.toString() === chapterId.toString()
+    );
+
+    const nextChapter =
+      currentChapterIndex > 0 ? chapters[currentChapterIndex - 1] : null;
+    const previousChapter =
+      currentChapterIndex < chapters.length - 1
+        ? chapters[currentChapterIndex + 1]
+        : null;
+
+    res.status(200).json({ manga, previousChapter, nextChapter });
   } catch (error) {
     res.status(500).json(error);
   }
