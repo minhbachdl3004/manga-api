@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "node_version":"16.15.1",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js",
-    "vercel-build": "echo hello"
+    "start": "node index.js"
   },
   "keywords": [],
   "author": "",
