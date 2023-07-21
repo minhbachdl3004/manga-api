@@ -1,7 +1,7 @@
 const mangaController = require("../controllers/mangaController");
 const recommendMangaController = require("../controllers/recommendMangaController")
 const trendingMangaController = require("../controllers/trendingMangaController")
-const multer = require('multer');
+// const multer = require('multer');
 
 const router = require("express").Router();
 
@@ -12,9 +12,9 @@ router.get("/get-all", mangaController.getAllMangas);
 router.get("/mangaId/:mangaId", mangaController.getMangaById)
 
 // Configure multer for handling file uploads
-const upload = multer({ dest: 'uploads/' });
+// const upload = multer({ dest: 'uploads/' });
 //ADD MANGA
-router.post("/add", upload.single('file'), mangaController.addManga);
+// router.post("/add", upload.single('file'), mangaController.addManga);
 
 //GET MANGAS BY NAME
 router.get("/name/search", mangaController.searchMangaByName);
